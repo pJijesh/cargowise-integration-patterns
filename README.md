@@ -126,7 +126,7 @@ Planned, not promised. Order and timing change with other work.
 
 ## About the author
 
-Jijesh Puliyappottammal is an IT Manager working in freight and logistics technology, with a background in ERP integration, cloud infrastructure and IT governance. GitHub: [pJijesh](https://github.com/pJijesh). LinkedIn: [linkedin.com/in/pjijesh](https://www.linkedin.com/in/pjijesh).
+Puliyappottammal Jijesh is an IT Manager working in freight and logistics technology, with a background in ERP integration, cloud infrastructure and IT governance. GitHub: [pJijesh](https://github.com/pJijesh). LinkedIn: [linkedin.com/in/pjijesh](https://www.linkedin.com/in/pjijesh).
 
 The views and designs here are the author's own, written from general engineering knowledge and public information, and do not describe any employer's or client's systems.
 

@@ -9,7 +9,7 @@ description = "Independent, unofficial reference implementation of ERP integrati
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "Jijesh Puliyappottammal" }]
+authors = [{ name = "Puliyappottammal Jijesh" }]
 dependencies = []
 
 [project.optional-dependencies]

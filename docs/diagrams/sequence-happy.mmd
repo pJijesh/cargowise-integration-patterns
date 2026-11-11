@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    participant S as Sender
+    participant A as Adapter
+    participant P as Pipeline
+    participant DB as SQLite store
+    participant E as ERP (mock)
+
+    S->>A: XML message (optional correlation id)
+    A->>P: process(raw, source, correlation id)
+    P->>P: parse and validate against XSD
+    P->>DB: begin(key, fingerprint)
+    DB-->>P: NEW (lease taken)
+    P->>DB: is newer sequence already delivered?
+    DB-->>P: no
+    P->>P: transform to ERP XML
+    P->>E: POST with Idempotency-Key and correlation id
+    E-->>P: 201 Created
+    P->>DB: mark delivered, advance shipment sequence
+    P-->>A: DELIVERED
+    A-->>S: 200 (HTTP) or file moved to processed/

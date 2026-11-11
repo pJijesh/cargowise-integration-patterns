@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    participant P as Pipeline
+    participant E as ERP (mock)
+    participant DB as SQLite store
+    participant Q as Dead-letter store
+    participant Op as Operator (CLI)
+
+    P->>E: POST (attempt 1)
+    E--xP: timeout (ERP stored it, reply lost)
+    Note over P: transient error, wait random 0..base
+    P->>E: POST (attempt 2, same Idempotency-Key)
+    E-->>P: 409 already processed
+    Note over P: duplicate treated as success
+    P->>DB: mark delivered
+
+    Note over P,E: A different message during an outage
+    P->>E: POST (attempts 1 to 4, growing jittered waits)
+    E-->>P: 503 each time
+    P->>DB: mark dead lettered
+    P->>Q: add(reason RETRIES_EXHAUSTED, payload, attempts)
+    Op->>Q: dlq list
+    Note over E: ERP recovers
+    Op->>P: dlq replay id
+    P->>DB: begin (RESUMED)
+    P->>E: POST
+    E-->>P: 201 Created
+    P->>DB: mark delivered
+    P->>Q: mark replayed

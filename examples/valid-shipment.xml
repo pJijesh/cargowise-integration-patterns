@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShipmentMessage xmlns="urn:example:illustrative:shipment-message:1" version="1.0">
+  <Header>
+    <MessageId>MSG-0001</MessageId>
+    <Sequence>1</Sequence>
+    <SentAt>2026-03-01T09:30:00Z</SentAt>
+    <Sender>PARTNER-A</Sender>
+  </Header>
+  <Shipment>
+    <Reference>EXAMPLE-0001</Reference>
+    <Mode>SEA</Mode>
+    <Status>DEPARTED</Status>
+    <Origin>GBSOU</Origin>
+    <Destination>NLRTM</Destination>
+    <Parties>
+      <Party role="SHIPPER"><Name>Example Exports Ltd</Name></Party>
+      <Party role="CONSIGNEE"><Name>Sample Imports BV</Name></Party>
+    </Parties>
+    <GrossWeight unit="KG">1250.50</GrossWeight>
+    <PackageCount>12</PackageCount>
+    <Events>
+      <Event code="DEP" occurredAt="2026-03-01T08:00:00Z"/>
+    </Events>
+  </Shipment>
+</ShipmentMessage>

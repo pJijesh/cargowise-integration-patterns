@@ -1,0 +1,14 @@
+stateDiagram-v2
+    direction LR
+    [*] --> InProgress: new key, lease taken
+    [*] --> DeadLettered: invalid, or key reused with different content
+    [*] --> Skipped: duplicate
+    InProgress --> Delivered: 201 or 409
+    InProgress --> Stale: older sequence
+    InProgress --> DeadLettered: permanent or exhausted
+    DeadLettered --> InProgress: replay
+    DeadLettered --> Discarded: discard with reason
+    Delivered --> [*]
+    Stale --> [*]
+    Skipped --> [*]
+    Discarded --> [*]

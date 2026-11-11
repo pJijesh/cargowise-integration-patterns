@@ -1,0 +1,25 @@
+flowchart TB
+    F["Folder watcher"] --> V
+    H["HTTP endpoint"] --> V
+
+    subgraph PIPE["Pipeline"]
+        V["1. Parse and XSD validate"] --> I["2. Idempotency check"]
+        I --> O["3. Ordering guard"]
+        O --> T["4. Transform"]
+        T --> D["5. Deliver with retry,\nbackoff and jitter"]
+    end
+
+    D --> ERP["Mock ERP"]
+
+    subgraph DB["SQLite"]
+        S1[("messages,\nshipment_state")]
+        S2[("dead_letters")]
+    end
+
+    I <--> S1
+    D -->|"delivered or 409"| S1
+    V -->|"poison"| S2
+    D -->|"permanent or exhausted"| S2
+    CLI["CLI: dlq list, replay,\ndiscard; reconcile"] --> S2
+    CLI -->|"reconcile"| S1
+    CLI -->|"reconcile"| ERP

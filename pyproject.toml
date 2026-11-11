@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cargowise-integration-patterns"
+version = "0.1.0"
+description = "Independent, unofficial reference implementation of ERP integration patterns (illustrative, stdlib only)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Jijesh Puliyappottammal" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "lxml>=5"]
+
+[project.scripts]
+mini-middleware = "mini_middleware.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mini_middleware = ["schemas/*.xsd"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

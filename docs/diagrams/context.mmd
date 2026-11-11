@@ -1,0 +1,21 @@
+flowchart LR
+    subgraph Senders["Message senders (illustrative)"]
+        P1["Partner system A\n(file drop)"]
+        P2["Partner system B\n(HTTP POST)"]
+    end
+
+    subgraph MW["Integration layer (this repository)"]
+        M["mini_middleware\nvalidate, deduplicate,\ntransform, deliver, record"]
+    end
+
+    ERP["ERP platform\n(accepts XML messages over HTTP;\nstand-in: mock ERP)"]
+    OPS["Operations team\n(dead-letter CLI, reconciliation report)"]
+    OBS["Observability\n(JSON logs, counters)"]
+
+    P1 -->|"XML files"| M
+    P2 -->|"XML over HTTP"| M
+    M -->|"transformed XML + Idempotency-Key"| ERP
+    ERP -->|"201 / 409 / 4xx / 5xx"| M
+    M -->|"structured logs, metrics"| OBS
+    OPS -->|"list, replay, discard, reconcile"| M
+    M -.->|"read-back for reconciliation"| ERP

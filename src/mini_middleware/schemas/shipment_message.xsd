@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ILLUSTRATIVE schema for a generic shipment status message.
+  This is NOT a CargoWise schema and NOT the Universal Shipment schema.
+  It exists only so the reference implementation has something to validate.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:sm="urn:example:illustrative:shipment-message:1"
+           targetNamespace="urn:example:illustrative:shipment-message:1"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <!-- Simple types -->
+  <xs:simpleType name="MessageIdType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Za-z0-9._-]{1,64}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SenderType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z0-9_-]{2,20}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ReferenceType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z0-9-]{3,30}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="LocationCodeType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ModeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AIR"/>
+      <xs:enumeration value="SEA"/>
+      <xs:enumeration value="ROAD"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="StatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BOOKED"/>
+      <xs:enumeration value="DEPARTED"/>
+      <xs:enumeration value="ARRIVED"/>
+      <xs:enumeration value="DELIVERED"/>
+      <xs:enumeration value="CANCELLED"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PartyRoleType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SHIPPER"/>
+      <xs:enumeration value="CONSIGNEE"/>
+      <xs:enumeration value="NOTIFY"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="WeightUnitType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KG"/>
+      <xs:enumeration value="LB"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="WeightValueType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="1000000"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PackageCountType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="100000"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NameType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EventCodeType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{3,6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="VersionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Complex types -->
+  <xs:complexType name="HeaderType">
+    <xs:sequence>
+      <xs:element name="MessageId" type="sm:MessageIdType"/>
+      <xs:element name="Sequence" type="xs:positiveInteger"/>
+      <xs:element name="SentAt" type="xs:dateTime"/>
+      <xs:element name="Sender" type="sm:SenderType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PartyType">
+    <xs:sequence>
+      <xs:element name="Name" type="sm:NameType"/>
+    </xs:sequence>
+    <xs:attribute name="role" type="sm:PartyRoleType" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="PartiesType">
+    <xs:sequence>
+      <xs:element name="Party" type="sm:PartyType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="WeightType">
+    <xs:simpleContent>
+      <xs:extension base="sm:WeightValueType">
+        <xs:attribute name="unit" type="sm:WeightUnitType" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="EventType">
+    <xs:attribute name="code" type="sm:EventCodeType" use="required"/>
+    <xs:attribute name="occurredAt" type="xs:dateTime" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="EventsType">
+    <xs:sequence>
+      <xs:element name="Event" type="sm:EventType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ShipmentType">
+    <xs:sequence>
+      <xs:element name="Reference" type="sm:ReferenceType"/>
+      <xs:element name="Mode" type="sm:ModeType"/>
+      <xs:element name="Status" type="sm:StatusType"/>
+      <xs:element name="Origin" type="sm:LocationCodeType"/>
+      <xs:element name="Destination" type="sm:LocationCodeType"/>
+      <xs:element name="Parties" type="sm:PartiesType"/>
+      <xs:element name="GrossWeight" type="sm:WeightType"/>
+      <xs:element name="PackageCount" type="sm:PackageCountType"/>
+      <xs:element name="Events" type="sm:EventsType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ShipmentMessageType">
+    <xs:sequence>
+      <xs:element name="Header" type="sm:HeaderType"/>
+      <xs:element name="Shipment" type="sm:ShipmentType"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="sm:VersionType" use="required"/>
+  </xs:complexType>
+
+  <xs:element name="ShipmentMessage" type="sm:ShipmentMessageType"/>
+</xs:schema>

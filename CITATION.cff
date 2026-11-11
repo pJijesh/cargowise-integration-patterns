@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it using the metadata below."
+title: "cargowise-integration-patterns"
+abstract: "Independent reference for freight ERP integration: idempotency, retries and a dead-letter queue, with a working Python middleware demo."
+type: software
+authors:
+  - family-names: "Puliyappottammal"
+    given-names: "Jijesh"
+repository-code: "https://github.com/pJijesh/cargowise-integration-patterns"
+url: "https://github.com/pJijesh/cargowise-integration-patterns"
+license: MIT
+version: 1.0.0
+date-released: "2026-11-11"
+keywords:
+  - architecture
+  - erp
+  - freight
+  - idempotency
+  - logistics
+  - middleware
+  - python
+  - system-integration

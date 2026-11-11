@@ -1,5 +1,7 @@
 # cargowise-integration-patterns
 
+![cargowise-integration-patterns: project banner](docs/images/banner.png)
+
 [![CI](https://github.com/pJijesh/cargowise-integration-patterns/actions/workflows/ci.yml/badge.svg)](https://github.com/pJijesh/cargowise-integration-patterns/actions/workflows/ci.yml) [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE) ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg) ![Dependencies: none](https://img.shields.io/badge/dependencies-none-brightgreen.svg)
 
 **Problem:** moving shipment messages into an ERP reliably is harder than it looks, because networks lose acknowledgements, senders resend, updates arrive out of order, and bad data must be corrected without losing anything.
